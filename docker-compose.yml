@@ -3,7 +3,6 @@ services:
   db:
     image: postgres
     restart: always
-    shm_size: 128mb
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -26,5 +25,14 @@ services:
       - HTTPS_PORT=${HTTPS_PORT}
     env_file:
     - .env
+  db-test:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: testdb
+    ports:
+      - "5433:5432"   # porta diferente para não conflitar
 
   

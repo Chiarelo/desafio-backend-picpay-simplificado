@@ -1,0 +1,1 @@
+# DATABASE_URL="postgresql://vinicius_picpay:6JEQMzP56dNVkzX2hCGZMKfL82S6ysDU@db:5432/picpay_simplificado_db?schema=public"
