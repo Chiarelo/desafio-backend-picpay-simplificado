@@ -11,51 +11,51 @@ datasource db {
 
 // 1. Enum para Tipos de Usuário
 enum UserType {
-  COMMON   // Usuário Comum (Pode Enviar e Receber)
+  COMMON // Usuário Comum (Pode Enviar e Receber)
   MERCHANT // Lojista (Só Recebe)
 }
 
 // 2. Modelo User (a Carteira)
 model User {
-  id        String   @id @default(uuid())
-  fullName  String
-  
+  id       String @id @default(uuid())
+  fullName String
+
   // Requisito: CPF/CNPJ e e-mails devem ser únicos
-  cpfCnpj   String   @unique
-  email     String   @unique
-  
-  password  String   // Deve ser hasheada antes de salvar
-  
+  cpfCnpj String @unique
+  email   String @unique
+
+  password String // Deve ser hasheada antes de salvar
+
   // Saldo da carteira (usar Decimal para precisão monetária)
-  balance   Decimal  @default(0) @db.Decimal(10, 2)
-  
-  type      UserType @default(COMMON)
+  balance Decimal @default(0) @db.Decimal(10, 2)
+
+  type UserType @default(COMMON)
 
   // Opcional, mas útil: rastrear transações
   sentTransactions     Transaction[] @relation("PayerTransactions")
   receivedTransactions Transaction[] @relation("PayeeTransactions")
-  
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
+
   // Mapeando nome no banco de dados para users
   @@map("users")
 }
 
 // Opcional: Modelo para rastrear as transações (bom para auditoria)
 model Transaction {
-  id        String   @id @default(uuid())
-  value     Decimal  @db.Decimal(10, 2)
+  id    String  @id @default(uuid())
+  value Decimal @db.Decimal(10, 2)
 
-  payerId   String
-  payeeId   String
+  payerId String
+  payeeId String
 
   // Relacionamentos com o modelo User
-  payer     User @relation("PayerTransactions", fields: [payerId], references: [id])
-  payee     User @relation("PayeeTransactions", fields: [payeeId], references: [id])
+  payer User @relation("PayerTransactions", fields: [payerId], references: [id])
+  payee User @relation("PayeeTransactions", fields: [payeeId], references: [id])
 
   authorized Boolean @default(false)
-  
+
   createdAt DateTime @default(now())
 
   @@map("transactions")

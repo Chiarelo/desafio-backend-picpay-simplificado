@@ -9,6 +9,7 @@ import { UserService } from 'src/user/user.service';
 import { compare } from 'bcrypt';
 import type { User } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
+import type { JwtPayload } from './dto/tokenAuth.interface';
 
 @Injectable({})
 export class AuthService {
@@ -19,20 +20,19 @@ export class AuthService {
   ) {}
 
   async createToken(user: User) {
-    return this.jwtService.sign(
-      {
-        email: user.email,
-        type: user.type,
-      },
-      {
-        subject: String(user.id),
-      },
-    );
+    const payload: JwtPayload = {
+      sub: String(user.id),
+      email: user.email,
+      document: user.cpfCnpj,
+      type: user.type,
+    };
+
+    return this.jwtService.sign(payload);
   }
 
   async checkToken(token: string) {
     try {
-      const data = await this.jwtService.verifyAsync(token);
+      const data = await this.jwtService.verifyAsync<JwtPayload>(token);
 
       return data;
     } catch (error) {
@@ -45,6 +45,15 @@ export class AuthService {
       }
 
       throw new BadRequestException('Erro ao validar token');
+    }
+  }
+
+  isValidToken(token: string) {
+    try {
+      this.checkToken(token);
+      return true;
+    } catch (error) {
+      return false;
     }
   }
 

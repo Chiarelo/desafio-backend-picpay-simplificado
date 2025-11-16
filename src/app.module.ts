@@ -9,9 +9,10 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { UuidValidationMiddleware } from './middlewares/id-check-middleware';
 import { AuthModule } from './session/auth.module';
+import { TransactionsModule } from './transactions/transactions.module';
 
 @Module({
-  imports: [UserModule, AuthModule],
+  imports: [UserModule, AuthModule, TransactionsModule],
   controllers: [AppController],
   providers: [AppService],
 })
