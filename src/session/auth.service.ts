@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+/* eslint-disable @typescript-eslint/require-await */
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
 import { UserService } from 'src/user/user.service';
 import { compare } from 'bcrypt';
@@ -13,7 +18,6 @@ export class AuthService {
     private readonly prisma: PrismaService,
   ) {}
 
-  // eslint-disable-next-line @typescript-eslint/require-await
   async createToken(user: User) {
     return this.jwtService.sign(
       {
@@ -24,6 +28,24 @@ export class AuthService {
         subject: String(user.id),
       },
     );
+  }
+
+  async checkToken(token: string) {
+    try {
+      const data = await this.jwtService.verifyAsync(token);
+
+      return data;
+    } catch (error) {
+      if (error.name === 'TokenExpiredError') {
+        throw new UnauthorizedException('Token expirado');
+      }
+
+      if (error.name === 'JsonWebTokenError') {
+        throw new UnauthorizedException('Token inválido');
+      }
+
+      throw new BadRequestException('Erro ao validar token');
+    }
   }
 
   async Login(email: string, password: string) {
@@ -45,5 +67,9 @@ export class AuthService {
     }
 
     return this.createToken(user);
+  }
+
+  async checkroute(token: string) {
+    return this.checkToken(token);
   }
 }
