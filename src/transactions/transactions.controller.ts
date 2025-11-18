@@ -13,6 +13,6 @@ export class TransactionsController {
 
   @Post()
   async Transfer(@User() user, @Body() body: UserTransaction) {
-    return this.transactionsService.Transfer(user, body);
+    return this.transactionsService.transfer(user, body);
   }
 }

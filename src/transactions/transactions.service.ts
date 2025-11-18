@@ -4,10 +4,10 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaService } from '../database/prisma.service';
 import type { User } from '@prisma/client';
 import { UserTransaction } from './dto/UserTransactionDto';
-import { UserService } from 'src/user/user.service';
+import { UserService } from '../user/user.service'; 
 
 @Injectable()
 export class TransactionsService {
@@ -17,7 +17,7 @@ export class TransactionsService {
     private readonly userService: UserService,
   ) {}
 
-  async Transfer(user: User, { payee, payer, value }: UserTransaction) {
+  async transfer(user: User, { payee, payer, value }: UserTransaction) {
     if (payer !== user.id) {
       throw new UnauthorizedException(
         'Usuário não autorizado a enviar com este ID',

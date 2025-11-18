@@ -9,4 +9,12 @@ export const prismaMock = {
     update: jest.fn(),
     delete: jest.fn(),
   },
+
+  transaction: {
+    create: jest.fn(),
+  },
+
+  $transaction: jest.fn(async (cb) => {
+    return cb(prismaMock);
+  }),
 };

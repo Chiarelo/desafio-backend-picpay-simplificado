@@ -1,9 +1,9 @@
 import { TestingModule, Test } from "@nestjs/testing"
 import { UserService } from "./user.service"
-import { PrismaService } from "src/database/prisma.service";
-import { prismaMock } from "src/testing/prisma.service.mock";
+import { PrismaService } from "../database/prisma.service"; 
+import { prismaMock } from "../testing/prisma.service.mock"; 
 import { UserDto } from "./dto/userCreate.dto";
-import { userEntityList } from "src/testing/user-list.mock";
+import { userEntityList } from "../testing/user-list.mock"; 
 import { BadRequestException, NotFoundException } from "@nestjs/common";
 
 describe('UserService', () => {
