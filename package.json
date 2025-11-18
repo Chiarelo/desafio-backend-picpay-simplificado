@@ -17,6 +17,9 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "clear:db:test": "prisma migrate reset --force --skip-seed --schema=./prisma/schema.prisma",
+    "pretest:e2e": "pnpm run clear:db:test && pnpm run prisma migrate",
+    "posttest:e2e": "pnpm run clear:db:test",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "prisma:studio": "dotenv -e .env -- prisma studio",
     "prisma:generate": "dotenv -e .env -- prisma generate",
@@ -28,6 +31,7 @@
     "@nestjs/jwt": "^11.0.1",
     "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/swagger": "^11.2.3",
     "@prisma/client": "^6.19.0",
     "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.1",
@@ -35,6 +39,7 @@
     "passport": "^0.7.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
+    "swagger-ui-express": "^5.0.1",
     "uuid": "^13.0.0"
   },
   "devDependencies": {
@@ -48,6 +53,7 @@
     "@types/node": "^22.10.7",
     "@types/passport": "^1.0.17",
     "@types/supertest": "^6.0.2",
+    "@types/swagger-ui-express": "^4.1.8",
     "dotenv-cli": "^11.0.0",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
@@ -79,8 +85,6 @@
     "moduleNameMapper": {
       "^src/(.*)$": "<rootDir>/$1"
     },
-
-
     "collectCoverageFrom": [
       "**/*.(t|j)s"
     ],
